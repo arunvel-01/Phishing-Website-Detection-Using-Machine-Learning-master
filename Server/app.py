@@ -3,6 +3,7 @@ from tensorflow import keras
 import numpy as np
 import json
 import phishing_features
+from werkzeug.serving import run_simple
 
 # Creating Flask app
 app = Flask(__name__)
@@ -54,4 +55,4 @@ def index():
         return jsonify({"error": "Only POST requests are allowed"})
 
 if __name__ == "__main__":
-    app.run(debug=True)
+    run_simple('localhost', 5000, app)

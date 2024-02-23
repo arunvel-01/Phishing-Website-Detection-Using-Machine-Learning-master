@@ -1,10 +1,8 @@
-# import libraries
 from flask import Flask, jsonify, request
 from tensorflow import keras
 import numpy as np
 import json
 import phishing_features
-
 
 # Creating Flask app
 app = Flask(__name__)
@@ -35,10 +33,15 @@ def thresholding(prediction):
     else:
         return 0
 
+# Routing for GET requests
+@app.route("/", methods=['GET'])
+def hello():
+    return "Hello from server"
+
 # Routing for POST requests
-@app.route("/", methods=['GET', 'POST'])
+@app.route("/", methods=['POST'])
 def index():
-    if (request.method == "POST"):
+    if request.method == "POST":
         response = request.get_json()
         predict = make_predict(response["url"])
         print(predict, "- predicted value")
@@ -48,8 +51,7 @@ def index():
         }
         return jsonify(response_data)
     else:
-        print("Error - Not received POST method")
-        return jsonify({"state":-1})
+        return jsonify({"error": "Only POST requests are allowed"})
 
 if __name__ == "__main__":
     app.run(debug=True)
